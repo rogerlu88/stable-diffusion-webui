@@ -29,16 +29,20 @@ jobs:
             # Navigate to the models folder and download required files
             cd models
             # Example: Downloading a model file (adjust the URL)
-            if [ ! -f model_file_name ]; then
-              wget https://huggingface.co/stabilityai/stable-diffusion-2/resolve/main/768-v-ema.safetensors
-            fi
+            # if [ ! -f model_file_name ]; then
+            #   wget https://huggingface.co/stabilityai/stable-diffusion-2/resolve/main/768-v-ema.safetensors
+            # fi
 
             # Navigate to the extensions folder and clone repos
             cd ../extensions
-            if [ ! -d your-extension-folder ]; then
+            if [ ! -d "sd-webui-deforum/.git" ]; then
               git clone https://github.com/deforum-art/sd-webui-deforum
+            fi
+
+            if [ ! -d "sd-webui-controlnet/.git" ]; then
               git clone https://github.com/Mikubill/sd-webui-controlnet
             fi
+
 
             # Return to the main project directory
             cd ..
