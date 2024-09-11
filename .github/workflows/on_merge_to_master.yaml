@@ -23,8 +23,13 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.MOONLITE_AWS_EC2_SSH_USER }}@${{ secrets.MOONLITE_AWS_EC2_SSH_HOST }} << 'EOF'
             cd /home/ec2-user/apps/stable-diffusion-webui
+            
             git pull origin master
+            
             conda activate myenv
+
+            # Install missing Python packages
+            pip install insightface
 
             # Navigate to the models folder and download required files
             cd models
