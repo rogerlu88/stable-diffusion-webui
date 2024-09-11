@@ -22,7 +22,7 @@ jobs:
       - name: SSH into EC2 and deploy the app
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.MOONLITE_AWS_EC2_SSH_USER }}@${{ secrets.MOONLITE_AWS_EC2_SSH_HOST }} << 'EOF'
-            cd /apps/stable-diffusion-webui
+            cd /home/ec2-user/apps/stable-diffusion-webui
             git pull origin master
             conda activate myenv
 
