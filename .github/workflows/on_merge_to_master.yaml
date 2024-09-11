@@ -40,14 +40,17 @@ jobs:
 
             # Navigate to the extensions folder and clone repos
             cd ../extensions
-            if [ ! -d "sd-webui-deforum/.git" ]; then
-              git clone https://github.com/deforum-art/sd-webui-deforum
+            if [ ! -d "sd-webui-loractl/.git" ]; then
+              git clone https://github.com/cheald/sd-webui-loractl.git
             fi
 
             if [ ! -d "sd-webui-controlnet/.git" ]; then
               git clone https://github.com/Mikubill/sd-webui-controlnet
             fi
-
+            
+            if [ ! -d "sd-webui-deforum/.git" ]; then
+              git clone https://github.com/deforum-art/sd-webui-deforum
+            fi
 
             # Return to the main project directory
             cd ..
