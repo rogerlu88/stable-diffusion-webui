@@ -55,7 +55,9 @@ jobs:
             # Return to the main project directory
             cd ..
             
-            # Run the application
-            nohup python launch.py --listen --api &
+            # Run the application in the background using nohup
+            nohup python launch.py --listen --api > launch_output.log 2>&1 &
+
+            # Detach from the SSH session to prevent hanging
             exit
           EOF
