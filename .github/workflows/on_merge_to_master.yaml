@@ -26,14 +26,14 @@ jobs:
             
             # Kill any existing process of launch.py if running
             echo "Checking for existing launch.py process..."
-            PID=\$(pgrep -f launch.py)
+            PID=$(pgrep -f launch.py)
             if [ -n "\$PID" ]; then
               echo "Found running process for launch.py. Terminating PID \$PID..."
               kill -9 \$PID
             else
               echo "No running process found for launch.py."
             fi
-            
+
             # Check if the stable-diffusion-webui folder exists
             if [ ! -d "stable-diffusion-webui" ]; then
               echo "Cloning stable-diffusion-webui from GitHub..."
