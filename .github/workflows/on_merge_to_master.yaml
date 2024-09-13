@@ -71,11 +71,14 @@ jobs:
             # Return to the main project directory
             cd ..
             
-            # Run the application in the background using nohup
-            nohup python launch.py --nowebui --listen --api > nohup.out 2>&1 &
+            # Start the application with nohup and delay
+            nohup python launch.py --nowebui --listen --api &
 
             # Wait for 60 seconds to allow the application to fully start
             sleep 60
+
+            # Redirect nohup output
+            > nohup.out 2>&1 
             
             # Detach from the SSH session to prevent hanging
             exit
