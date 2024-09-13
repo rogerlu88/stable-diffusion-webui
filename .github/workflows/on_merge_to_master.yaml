@@ -24,14 +24,12 @@ jobs:
           ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -o StrictHostKeyChecking=no ${{ secrets.MOONLITE_AWS_EC2_SSH_USER }}@${{ secrets.MOONLITE_AWS_EC2_SSH_HOST }} << 'EOF'
             cd /home/ec2-user/apps
             
-            # Kill any existing process of launch.py if running
-            echo "Checking for existing launch.py process..."
-            PID=$(pgrep -f launch.py)
-            if [ -n "\$PID" ]; then
-              echo "Found running process for launch.py. Terminating PID \$PID..."
-              kill -9 \$PID
+            # Terminate any running instances of the Python app
+            if pgrep -f "python launch.py" > /dev/null; then
+              echo "Terminating existing instance of the app..."
+              pkill -f "python launch.py"
             else
-              echo "No running process found for launch.py."
+              echo "No existing instance found."
             fi
 
             # Check if the stable-diffusion-webui folder exists
