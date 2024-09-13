@@ -74,6 +74,9 @@ jobs:
             # Run the application in the background using nohup
             nohup python launch.py --nowebui --listen --api > nohup.out 2>&1 &
 
+            # Wait for 60 seconds to allow the application to fully start
+            sleep 60
+            
             # Detach from the SSH session to prevent hanging
             exit
           EOF
