@@ -25,11 +25,13 @@ jobs:
             cd /home/ec2-user/apps
             
             # Terminate any running instances of the Python app
-            if pgrep -f "python launch.py" > /dev/null; then
-              echo "Terminating existing instance of the app..."
-              pkill -f "python launch.py"
+            PORT=7860
+            PID=$(lsof -t -i:$PORT)
+            if [ ! -z "$PID" ]; then
+              echo "Terminating process running on port $PORT with PID $PID..."
+              kill -9 $PID
             else
-              echo "No existing instance found."
+              echo "No process is running on port $PORT."
             fi
 
             # Check if the stable-diffusion-webui folder exists
@@ -71,15 +73,9 @@ jobs:
             # Return to the main project directory
             cd ..
             
-            # Start the application with nohup and delay
-            nohup python launch.py --nowebui --listen --api &
+            # Run the application in the background using nohup
+            nohup python launch.py --nowebui --listen --api > nohup.out 2>&1 &
 
-            # Wait for 60 seconds to allow the application to fully start
-            sleep 60
-
-            # Redirect nohup output
-            > nohup.out 2>&1 
-            
             # Detach from the SSH session to prevent hanging
             exit
           EOF
