@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - main # Trigger on push to main branch
+env:
+  STABLE_DIFFUSION_API_PORT: 7861
 
 jobs:
   deploy:
@@ -25,7 +27,7 @@ jobs:
             cd /home/ec2-user/apps
             
             # Terminate any running instances of the Python app
-            PORT=7860
+            PORT=${{ env.STABLE_DIFFUSION_API_PORT }}
             PID=$(lsof -t -i:$PORT)
             if [ ! -z "$PID" ]; then
               echo "Terminating process running on port $PORT with PID $PID..."
@@ -74,7 +76,7 @@ jobs:
             cd ..
             
             # Run the application in the background using nohup
-            nohup python launch.py --nowebui --deforum-api --listen --api --port 7861 > nohup.out 2>&1 &
+            nohup python launch.py --nowebui --deforum-api --listen --api --port $PORT > nohup.out 2>&1 &
             
             # Detach from the SSH session to prevent hanging
             exit
