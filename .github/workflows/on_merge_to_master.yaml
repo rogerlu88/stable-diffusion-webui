@@ -74,8 +74,8 @@ jobs:
             cd ..
             
             # Run the application in the background using nohup
-            nohup python launch.py --nowebui --listen --api --port 7860 --deforum-api > nohup.out 2>&1 &
-
+            nohup python launch.py --nowebui --deforum-api --listen --api --port 7861 > nohup.out 2>&1 &
+            
             # Detach from the SSH session to prevent hanging
             exit
           EOF
