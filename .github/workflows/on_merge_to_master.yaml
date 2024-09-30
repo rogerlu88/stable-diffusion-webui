@@ -24,8 +24,8 @@ jobs:
       - name: Create .env file
         working-directory: ./
         run: |
-          echo "SDAPI_USERNAME=${{ vars.MOONLITE_SDAPI_USERNAME }}" >> .env
-          echo "SDAPI_PASSWORD=${{ vars.MOONLITE_SDAPI_PASSWORD }}" >> .env
+          echo "SDAPI_USERNAME=${{ secrets.MOONLITE_SDAPI_USERNAME }}" >> .env
+          echo "SDAPI_PASSWORD=${{ secrets.MOONLITE_SDAPI_PASSWORD }}" >> .env
 
       - name: SSH into EC2 and deploy the app
         run: |
