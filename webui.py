@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dotenv import load_dotenv
 import os
 import time
 
@@ -9,6 +10,7 @@ from modules import initialize
 
 startup_timer = timer.startup_timer
 startup_timer.record("launcher")
+load_dotenv()
 
 initialize.imports()
 
