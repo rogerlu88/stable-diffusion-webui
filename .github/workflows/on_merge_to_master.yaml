@@ -59,6 +59,7 @@ jobs:
 
             # Install missing Python packages
             pip install insightface
+            pip install python-dotenv
 
             # Navigate to the models folder and download required files
             cd models
