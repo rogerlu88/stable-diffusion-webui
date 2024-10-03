@@ -28,7 +28,7 @@ jobs:
 
       - name: Copy .env file to EC2 instance
         run: |
-          scp -o StrictHostKeyChecking=no .env ${{ secrets.MOONLITE_AWS_EC2_SSH_USER }}@${{ secrets.MOONLITE_AWS_EC2_SSH_HOST }}:/home/ec2-user/apps/stable-diffusion/
+          scp -o StrictHostKeyChecking=no .env ${{ secrets.MOONLITE_AWS_EC2_SSH_USER }}@${{ secrets.MOONLITE_AWS_EC2_SSH_HOST }}:/home/ec2-user/apps/stable-diffusion/.env
 
       - name: SSH into EC2 and deploy the app
         run: |
