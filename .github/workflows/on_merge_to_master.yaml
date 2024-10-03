@@ -22,7 +22,6 @@ jobs:
           ssh-private-key: ${{ secrets.MOONLITE_AWS_EC2_SSH_KEY }}
 
       - name: Create .env file
-        working-directory: ./
         run: |
           echo "SDAPI_USERNAME=${{ secrets.MOONLITE_SDAPI_USERNAME }}" >> .env
           echo "SDAPI_PASSWORD=${{ secrets.MOONLITE_SDAPI_PASSWORD }}" >> .env
