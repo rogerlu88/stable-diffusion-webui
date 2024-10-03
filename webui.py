@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dotenv import load_dotenv
 import os
 import time
 
@@ -9,6 +10,7 @@ from modules import initialize
 
 startup_timer = timer.startup_timer
 startup_timer.record("launcher")
+load_dotenv()
 
 initialize.imports()
 
@@ -30,6 +32,13 @@ def api_only():
     initialize.initialize()
 
     app = FastAPI()
+
+    # Initialize the Basic Authentication middleware
+    from basic_auth_middleware import BasicAuthMiddleware
+    USERNAME = os.getenv('SDAPI_USERNAME')
+    PASSWORD = os.getenv('SDAPI_PASSWORD')
+    app.add_middleware(BasicAuthMiddleware, username=USERNAME, password=PASSWORD)
+
     initialize_util.setup_middleware(app)
     api = create_api(app)
 
