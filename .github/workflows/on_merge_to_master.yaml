@@ -23,7 +23,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "SDAPI_USERNAME=${{ secrets.MOONLITE_SDAPI_USERNAME }}" >> .env
+          echo "SDAPI_USERNAME=${{ secrets.MOONLITE_SDAPI_USERNAME }}" > .env
           echo "SDAPI_PASSWORD=${{ secrets.MOONLITE_SDAPI_PASSWORD }}" >> .env
 
       - name: Copy .env file to EC2 instance
