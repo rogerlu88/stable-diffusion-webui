@@ -59,20 +59,22 @@ def warning_if_invalid_install_dir():
 
     This check should be removed when it's no longer applicable.
     """
+    from packaging.version import parse
     from pathlib import Path
+    import gradio
 
-    def abspath(path):
-        """modified from Gradio 3.41.2 gradio.utils.abspath()"""
-        if path.is_absolute():
-            return path
-        is_symlink = path.is_symlink() or any(parent.is_symlink() for parent in path.parents)
-        if is_symlink or path == path.resolve():
-            return Path.cwd() / path
-        else:
-            return path.resolve()
-    webui_root = Path(__file__).parent
-    if any(part.startswith(".") for part in abspath(webui_root).parts):
-        print(f'''{"!"*25} Warning {"!"*25}
+    if parse('3.32.0') <= parse(gradio.__version__) < parse('4'):
+
+        def abspath(path):
+            """modified from Gradio 3.41.2 gradio.utils.abspath()"""
+            if path.is_absolute():
+                return path
+            is_symlink = path.is_symlink() or any(parent.is_symlink() for parent in path.parents)
+            return Path.cwd() / path if (is_symlink or path == path.resolve()) else path.resolve()
+
+        webui_root = Path(__file__).parent
+        if any(part.startswith(".") for part in abspath(webui_root).parts):
+            print(f'''{"!"*25} Warning {"!"*25}
 WebUI is installed in a directory that has a leading dot (.) in one of its parent directories.
 This will prevent WebUI from functioning properly.
 Please move the installation to a different directory.
