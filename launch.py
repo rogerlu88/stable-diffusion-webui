@@ -1,3 +1,4 @@
+import socket
 from modules import launch_utils
 
 args = launch_utils.args
@@ -24,6 +25,14 @@ configure_for_tests = launch_utils.configure_for_tests
 start = launch_utils.start
 
 
+def check_network_connectivity():
+    try:
+        socket.create_connection(("www.github.com", 80))
+        return True
+    except OSError:
+        return False
+
+
 def main():
     if args.dump_sysinfo:
         filename = launch_utils.dump_sysinfo()
@@ -36,7 +45,11 @@ def main():
 
     with launch_utils.startup_timer.subcategory("prepare environment"):
         if not args.skip_prepare_environment:
-            prepare_environment()
+            if check_network_connectivity():
+                prepare_environment()
+            else:
+                print("Network connectivity check failed. Please check your network settings and try again.")
+                exit(1)
 
     if args.test_server:
         configure_for_tests()

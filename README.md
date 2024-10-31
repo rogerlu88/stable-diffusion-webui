@@ -160,6 +160,28 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 Find the instructions [here](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon).
 
+### Troubleshooting Network Issues
+
+If you encounter network-related issues while cloning repositories or installing packages, follow these steps:
+
+1. **Check Network Connectivity**: Ensure that your internet connection is stable and working. You can use the `ping` command to check connectivity to `github.com`:
+   ```bash
+   ping github.com
+   ```
+
+2. **Set Up Proxy**: If you are behind a proxy, configure your proxy settings for `git` and `pip`. Replace `ip:port` with your proxy's IP address and port:
+   ```bash
+   git config --global http.proxy http://ip:port
+   git config --global https.proxy http://ip:port
+   pip config set global.proxy http://ip:port
+   ```
+
+3. **Retry Mechanism**: If the issue persists, you can add a retry mechanism to the `git_clone` function in `modules/launch_utils.py` to handle transient network issues. This will automatically retry the cloning process a few times before failing.
+
+4. **Check Firewall and Security Software**: Ensure that your firewall or security software is not blocking the connection to `github.com`.
+
+5. **Use VPN**: If you are in a region with restricted access to certain websites, consider using a VPN to bypass these restrictions.
+
 ## Contributing
 Here's how to add code to this repo: [Contributing](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Contributing)
 
