@@ -168,7 +168,7 @@ def run_git(dir, name, command, desc=None, errdesc=None, custom_env=None, live: 
     return run(f'"{git}" -C "{dir}" {command}', desc=desc, errdesc=errdesc, custom_env=custom_env, live=live)
 
 
-def git_clone(url, dir, name, commithash=None):
+def git_clone(url, dir, name, commithash=None, retries=3):
     # TODO clone into temporary dir and move if successful
 
     if os.path.exists(dir):
@@ -188,11 +188,17 @@ def git_clone(url, dir, name, commithash=None):
 
         return
 
-    try:
-        run(f'"{git}" clone --config core.filemode=false "{url}" "{dir}"', f"Cloning {name} into {dir}...", f"Couldn't clone {name}", live=True)
-    except RuntimeError:
-        shutil.rmtree(dir, ignore_errors=True)
-        raise
+    for attempt in range(retries):
+        try:
+            run(f'"{git}" clone --config core.filemode=false "{url}" "{dir}"', f"Cloning {name} into {dir}...", f"Couldn't clone {name}", live=True)
+            break
+        except RuntimeError:
+            if attempt < retries - 1:
+                print(f"Retrying clone for {name} (attempt {attempt + 1}/{retries})...")
+                shutil.rmtree(dir, ignore_errors=True)
+            else:
+                shutil.rmtree(dir, ignore_errors=True)
+                raise
 
     if commithash is not None:
         run(f'"{git}" -C "{dir}" checkout {commithash}', None, "Couldn't checkout {name}'s hash: {commithash}")
