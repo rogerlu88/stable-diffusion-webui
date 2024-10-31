@@ -1435,7 +1435,7 @@ function extraNetworksSelectModel({tab, prompt, neg_prompt, allow_neg, checkpoin
     } else if (neg_prompt) {
         extraNetworksUpdatePrompt(tab.txt_prompt_elem, prompt);
         extraNetworksUpdatePrompt(tab.txt_neg_prompt_elem, neg_prompt, true);
-    } else if (allow_neg) {
+    } else if (allow_neg !== undefined) {
         extraNetworksUpdatePrompt(tab.active_prompt_elem, prompt);
     } else {
         extraNetworksUpdatePrompt(tab.txt_prompt_elem, prompt);
