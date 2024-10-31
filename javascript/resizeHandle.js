@@ -127,7 +127,7 @@
                 } else {
                     R.screenX = evt.changedTouches[0].screenX;
                 }
-            });
+            }, {passive: false});
         });
 
         resizeHandle.addEventListener('dblclick', onDoubleClick);

@@ -29,10 +29,11 @@ const EXTRA_NETWORKS_INIT_DATA_TIMEOUT_MS = 60000;
 const EXTRA_NETWORKS_FETCH_DATA_TIMEOUT_MS = 60000;
 const EXTRA_NETWORKS_SETUP_DEBOUNCE_TIME_MS = 1000;
 
-const re_extranet = /<([^:^>]+:[^:]+):[\d.]+>(.*)/;
+const re_extranet = /<([^:^>]+:[^:]+):[\d.]+>(.*)/s;
 const re_extranet_g = /<([^:^>]+:[^:]+):[\d.]+>/g;
 const re_extranet_neg = /\(([^:^>]+:[\d.]+)\)/;
 const re_extranet_g_neg = /\(([^:^>]+:[\d.]+)\)/g;
+
 var globalPopup = null;
 var globalPopupInner = null;
 const storedPopupIds = {};
