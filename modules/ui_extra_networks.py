@@ -453,8 +453,8 @@ class ExtraNetworksPage:
             "data-name": f'"{data_name}"',
             "data-path": f'"{data_path}"',
             "data-hash": item.get("shorthash", None),
-            "data-prompt": item.get("prompt", "").strip(),
-            "data-neg-prompt": item.get("negative_prompt", "").strip(),
+            "data-prompt": item.get("prompt", ""),
+            "data-neg-prompt": item.get("negative_prompt", ""),
             "data-allow-neg": self.allow_negative_prompt,
         }
 
@@ -714,8 +714,8 @@ class ExtraNetworksPage:
                     "data-depth": node.depth,
                     "data-path": f'"{data_path}"',
                     "data-hash": node.item.get("shorthash", None),
-                    "data-prompt": node.item.get("prompt", "").strip(),
-                    "data-neg-prompt": node.item.get("negative_prompt", "").strip(),
+                    "data-prompt": node.item.get("prompt", ""),
+                    "data-neg-prompt": node.item.get("negative_prompt", ""),
                     "data-allow-neg": self.allow_negative_prompt,
                 }
                 # Special case for checkpoints since they need to switch model on click.
