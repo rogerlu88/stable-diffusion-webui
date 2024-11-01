@@ -26,6 +26,10 @@ allowed_dirs = set()
 default_allowed_preview_extensions = ["png", "jpg", "jpeg", "webp", "gif"]
 
 
+def escape_html_attr(value):
+    return f'"{html.escape(str(value), quote=True)}"'
+
+
 class ListItem:
     """
     Attributes:
@@ -110,7 +114,7 @@ class DirectoryTreeNode:
             parts = self.relpath.split(os.sep)
             idxs = [i for i, x in enumerate(parts) if x.startswith(".")]
             if len(idxs) > 0:
-                self.rel_from_hidden = os.path.join(*parts[idxs[0] :])
+                self.rel_from_hidden = os.path.join(*parts[idxs[0]:])
 
         # If a parent is passed, then we add this instance to the parent's children.
         if self.parent is not None:
@@ -286,6 +290,21 @@ class ExtraNetworksPage:
 
         return ""
 
+    @staticmethod
+    def data_attributes_to_str(data_attributes):
+        data_attributes_str = ""
+        for k, v in data_attributes.items():
+            if isinstance(v, (bool,)):
+                # Boolean data attributes only need a key when true.
+                if v:
+                    data_attributes_str += f"{k} "
+            elif v not in [None, "", "''", '""']:
+                if isinstance(v, (str,)):
+                    data_attributes_str += f'{k}={escape_html_attr(v)} '
+                else:
+                    data_attributes_str += f"{k}={v} "
+        return data_attributes_str
+
     def build_tree_html_row(
         self,
         tabname: str,
@@ -340,18 +359,9 @@ class ExtraNetworksPage:
             if item is not None:
                 action_list_item_action_trailing += self.get_button_row(tabname, item)
 
-        data_attributes_str = ""
-        for k, v in data_attributes.items():
-            if isinstance(v, (bool,)):
-                # Boolean data attributes only need a key when true.
-                if v:
-                    data_attributes_str += f"{k} "
-            elif v not in [None, "", "''", '""']:
-                data_attributes_str += f"{k}={v} "
-
         res = self.tree_row_tpl.format(
             **{
-                "data_attributes": data_attributes_str,
+                "data_attributes": self.data_attributes_to_str(data_attributes),
                 "search_terms": "",
                 "indent_spans": indent_html,
                 "btn_type": btn_type,
@@ -449,9 +459,9 @@ class ExtraNetworksPage:
         data_name = item.get("name", "").strip()
         data_path = os.path.normpath(item.get("filename", "").strip())
         data_attributes = {
-            "data-div-id": f'"{div_id}"' if div_id else '""',
-            "data-name": f'"{data_name}"',
-            "data-path": f'"{data_path}"',
+            "data-div-id": div_id,
+            "data-name": data_name,
+            "data-path": data_path,
             "data-hash": item.get("shorthash", None),
             "data-prompt": item.get("prompt", ""),
             "data-neg-prompt": item.get("negative_prompt", ""),
@@ -461,18 +471,9 @@ class ExtraNetworksPage:
         if self.__class__.__name__ == "ExtraNetworksPageCheckpoints":
             data_attributes["data-is-checkpoint"] = True
 
-        data_attributes_str = ""
-        for k, v in data_attributes.items():
-            if isinstance(v, (bool,)):
-                # Boolean data attributes only need a key when true.
-                if v:
-                    data_attributes_str += f"{k} "
-            elif v not in [None, "", "''", '""']:
-                data_attributes_str += f"{k}={v} "
-
         return self.card_tpl.format(
             style=style,
-            data_attributes=data_attributes_str,
+            data_attributes=self.data_attributes_to_str(data_attributes),
             background_image=background_image,
             button_row=button_row,
             name=html.escape(item["name"].strip()),
@@ -675,11 +676,11 @@ class ExtraNetworksPage:
                                 children.append(child.id)
 
                 data_attributes = {
-                    "data-div-id": f'"{node.id}"',
-                    "data-parent-id": f'"{parent_id}"',
+                    "data-div-id": node.id,
+                    "data-parent-id": parent_id,
                     "data-tree-entry-type": "dir",
                     "data-depth": node.depth,
-                    "data-path": f'"{node.relpath}"',
+                    "data-path": node.relpath,
                     "data-expanded": tree_item.expanded,
                 }
 
@@ -690,7 +691,7 @@ class ExtraNetworksPage:
                     tabname=tabname,
                     label=os.path.basename(node.abspath),
                     btn_type="dir",
-                    btn_title=f'"{node.abspath}"',
+                    btn_title=escape_html_attr(node.abspath),
                     dir_is_empty=dir_is_empty,
                     indent_html=indent_html,
                     data_attributes=data_attributes,
@@ -707,12 +708,12 @@ class ExtraNetworksPage:
                 item_name = node.item.get("name", "").strip()
                 data_path = os.path.normpath(node.item.get("filename", "").strip())
                 data_attributes = {
-                    "data-div-id": f'"{node.id}"',
-                    "data-parent-id": f'"{parent_id}"',
+                    "data-div-id": node.id,
+                    "data-parent-id": parent_id,
                     "data-tree-entry-type": "file",
-                    "data-name": f'"{item_name}"',
+                    "data-name": item_name,
                     "data-depth": node.depth,
-                    "data-path": f'"{data_path}"',
+                    "data-path": data_path,
                     "data-hash": node.item.get("shorthash", None),
                     "data-prompt": node.item.get("prompt", ""),
                     "data-neg-prompt": node.item.get("negative_prompt", ""),

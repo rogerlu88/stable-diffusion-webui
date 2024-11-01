@@ -1429,7 +1429,13 @@ function extraNetworksControlRefreshOnClick(event) {
     }, EXTRA_NETWORKS_REFRESH_INTERNAL_DEBOUNCE_TIMEOUT_MS);
 }
 
+function parsePrompt(input) {
+    return input !== undefined ? JSON.parse(input) : input;
+}
+
 function extraNetworksSelectModel({tab, prompt, neg_prompt, allow_neg, checkpoint_name}) {
+    prompt = parsePrompt(prompt);
+    neg_prompt = parsePrompt(neg_prompt);
     if (checkpoint_name) {
         selectCheckpoint(checkpoint_name);
     } else if (neg_prompt) {
