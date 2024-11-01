@@ -720,7 +720,7 @@ class ExtraNetworksPage:
                     "data-allow-neg": self.allow_negative_prompt,
                 }
                 # Special case for checkpoints since they need to switch model on click.
-                # The JS code uses this flag to determine if it needs to swith model.
+                # The JS code uses this flag to determine if it needs to switch model.
                 if self.__class__.__name__ == "ExtraNetworksPageCheckpoints":
                     data_attributes["data-is-checkpoint"] = True
 
