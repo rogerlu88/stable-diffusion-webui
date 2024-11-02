@@ -1,4 +1,4 @@
-name: Deploy Moonlite Stable Diffusion to EC2
+name: Deploy to Production
 
 on:
   push:
