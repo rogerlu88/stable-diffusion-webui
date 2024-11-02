@@ -20,9 +20,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
         with:
-          aws-access-key-id: ${{ secrets.MOONLITE_AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.MOONLITE_AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.MOONLITE_AWS_REGION }}
+          aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.STAGING_AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
