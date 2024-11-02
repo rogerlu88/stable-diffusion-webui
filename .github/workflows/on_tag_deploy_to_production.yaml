@@ -1,16 +1,17 @@
 name: Deploy Moonlite Stable Diffusion to EC2
 
 on:
-  workflow_dispatch: # Enables manual trigger
   push:
-    branches:
-      - main # Trigger on push to main branch
+    tags:
+      - "v*"
+
 env:
   STABLE_DIFFUSION_API_PORT: 7861
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout the repository
