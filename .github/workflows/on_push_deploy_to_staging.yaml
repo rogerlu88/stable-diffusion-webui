@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     env:
-      IMAGE_TAG: $(echo $GITHUB_SHA | head -c 7)
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout code
