@@ -2,7 +2,6 @@ name: Build and deploy to Staging
 
 on:
   push:
-    workflow_dispatch:
     branches:
       - master
     paths:
@@ -12,6 +11,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      IMAGE_TAG: $(echo $GITHUB_SHA | head -c 7)
 
     steps:
       - name: Checkout code
@@ -38,9 +39,6 @@ jobs:
 
       - name: Build and tag Docker image
         run: |
-          # Get the Git commit hash for tagging
-          IMAGE_TAG=$(echo $GITHUB_SHA | head -c 7)
-
           # Build the Docker image
           docker build -t ${{ secrets.STAGING_ECR_URI }}:$IMAGE_TAG .
 
@@ -49,9 +47,6 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          # Get the Git commit hash for tagging
-          IMAGE_TAG=$(echo $GITHUB_SHA | head -c 7)
-
           # Push both the specific tag and 'latest' to ECR
           docker push ${{ secrets.STAGING_ECR_URI }}:$IMAGE_TAG
           docker push ${{ secrets.STAGING_ECR_URI }}:latest
@@ -68,11 +63,8 @@ jobs:
       - name: SSH into EC2 and run Docker image
         run: |
           ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=60 -o StrictHostKeyChecking=no ${{ secrets.STAGING_EC2_USER }}@${{ secrets.STAGING_EC2_HOST }} << 'EOF1'
-            # Define image tag based on Git commit hash
-            IMAGE_TAG=$(echo $GITHUB_SHA | head -c 7)
-
             # Log in to ECR
-            docker login -u AWS -p $(aws ecr get-login-password --region ${{ secrets.STAGING_AWS_REGION }}) ${{ secrets.STAGING_EC2_HOST }}
+            docker login -u AWS -p $(aws ecr get-login-password --region ${{ secrets.STAGING_AWS_REGION }}) ${{ secrets.STAGING_ECR_URI }}
 
            
             # Pull the latest Docker image
